@@ -99,12 +99,12 @@ export default function SwipeCards({ cards }: SwipeCardsProps) {
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isDragging) {
-        nextSlide()
+        setCurrentIndex((prev) => (prev + 1) % cards.length)
       }
     }, 5000) // 5秒ごと
 
     return () => clearInterval(interval)
-  }, [isDragging, currentIndex])
+  }, [isDragging, cards.length])
 
   return (
     <div className="relative w-full max-w-6xl mx-auto">

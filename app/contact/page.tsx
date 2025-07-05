@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Contact() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-light to-white py-16">
@@ -27,12 +29,12 @@ export default function Contact() {
             <p className="text-sm text-gray-600 mb-4">
               診断結果を保存またはキャプチャして、お問い合わせ時にご共有ください。
             </p>
-            <a
+            <Link
               href="/"
               className="btn-primary inline-block"
             >
               トップページに戻る
-            </a>
+            </Link>
           </div>
         </div>
       </div>
