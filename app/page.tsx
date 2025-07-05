@@ -15,7 +15,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           <div className="card group">
             <div className="text-center mb-6">
               <div className="w-20 h-20 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-all">
@@ -48,6 +48,24 @@ export default function Home() {
               </p>
             </div>
             <Link href="/kaizen-shindan" className="btn-secondary block text-center">
+              診断を始める
+            </Link>
+          </div>
+
+          <div className="card group lg:col-span-1 md:col-span-2">
+            <div className="text-center mb-6">
+              <div className="w-20 h-20 bg-accent bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-opacity-20 transition-all">
+                <svg className="w-10 h-10 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-dark mb-3">Webマーケ診断</h2>
+              <p className="text-gray-600 mb-6">
+                集客経路を分析し<br />
+                最適なマーケティング施策をご提案します
+              </p>
+            </div>
+            <Link href="/marketing-shindan" className="bg-accent text-white font-bold py-3 px-6 rounded-lg hover:bg-teal-600 transition-colors duration-300 block text-center">
               診断を始める
             </Link>
           </div>
