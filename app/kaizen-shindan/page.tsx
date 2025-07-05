@@ -8,6 +8,8 @@ type ImprovementData = {
   issues: string[]
   competitorUrl: string
   additionalInfo: string
+  currentTrafficSources: string[]
+  marketingGoals: string[]
 }
 
 export default function KaizenShindan() {
@@ -17,6 +19,8 @@ export default function KaizenShindan() {
     issues: [],
     competitorUrl: '',
     additionalInfo: '',
+    currentTrafficSources: [],
+    marketingGoals: [],
   })
 
   const issueOptions = [
@@ -28,6 +32,31 @@ export default function KaizenShindan() {
     { value: 'confusing-navigation', label: 'ナビゲーションがわかりにくい' },
     { value: 'low-conversion', label: 'コンバージョン率が低い' },
     { value: 'no-analytics', label: 'アクセス解析ができていない' },
+    { value: 'low-traffic', label: 'アクセス数が少ない' },
+    { value: 'no-marketing', label: '集客施策が不足している' },
+  ]
+
+  const trafficSourceOptions = [
+    { value: 'organic-search', label: 'Google等の検索エンジン' },
+    { value: 'direct', label: '直接アクセス（URL入力・ブックマーク）' },
+    { value: 'social-media', label: 'SNS（Instagram、X、Facebook等）' },
+    { value: 'paid-ads', label: 'Web広告（Google広告、Yahoo広告等）' },
+    { value: 'referral', label: '他サイトからのリンク' },
+    { value: 'email', label: 'メールマガジン' },
+    { value: 'offline', label: 'オフライン（チラシ、看板等）' },
+    { value: 'word-of-mouth', label: '口コミ・紹介' },
+    { value: 'none', label: '特に集客活動はしていない' },
+  ]
+
+  const marketingGoalOptions = [
+    { value: 'increase-traffic', label: 'サイトのアクセス数を増やしたい' },
+    { value: 'improve-seo', label: '検索順位を上げたい' },
+    { value: 'local-seo', label: '地域での検索順位を上げたい（MEO）' },
+    { value: 'social-growth', label: 'SNSでの認知度を高めたい' },
+    { value: 'lead-generation', label: '見込み客を増やしたい' },
+    { value: 'customer-retention', label: 'リピーターを増やしたい' },
+    { value: 'brand-awareness', label: 'ブランド認知度を向上させたい' },
+    { value: 'cost-reduction', label: '集客コストを削減したい' },
   ]
 
   const handleIssueToggle = (issue: string) => {
@@ -35,6 +64,20 @@ export default function KaizenShindan() {
       ? formData.issues.filter(i => i !== issue)
       : [...formData.issues, issue]
     setFormData({ ...formData, issues: updatedIssues })
+  }
+
+  const handleTrafficSourceToggle = (source: string) => {
+    const updatedSources = formData.currentTrafficSources.includes(source)
+      ? formData.currentTrafficSources.filter(s => s !== source)
+      : [...formData.currentTrafficSources, source]
+    setFormData({ ...formData, currentTrafficSources: updatedSources })
+  }
+
+  const handleMarketingGoalToggle = (goal: string) => {
+    const updatedGoals = formData.marketingGoals.includes(goal)
+      ? formData.marketingGoals.filter(g => g !== goal)
+      : [...formData.marketingGoals, goal]
+    setFormData({ ...formData, marketingGoals: updatedGoals })
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -80,6 +123,46 @@ export default function KaizenShindan() {
                       className="mr-3 w-4 h-4 text-secondary"
                     />
                     <span className="text-gray-700">{issue.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* 現在の集客経路 */}
+            <div>
+              <label className="block text-sm font-medium mb-3">
+                現在の主な集客経路（複数選択可）
+              </label>
+              <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+                {trafficSourceOptions.map((source) => (
+                  <label key={source.value} className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.currentTrafficSources.includes(source.value)}
+                      onChange={() => handleTrafficSourceToggle(source.value)}
+                      className="mr-3 w-4 h-4 text-secondary"
+                    />
+                    <span className="text-gray-700">{source.label}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* マーケティング目標 */}
+            <div>
+              <label className="block text-sm font-medium mb-3">
+                集客・マーケティングの目標（複数選択可）
+              </label>
+              <div className="space-y-3 bg-gray-50 p-4 rounded-lg">
+                {marketingGoalOptions.map((goal) => (
+                  <label key={goal.value} className="flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.marketingGoals.includes(goal.value)}
+                      onChange={() => handleMarketingGoalToggle(goal.value)}
+                      className="mr-3 w-4 h-4 text-secondary"
+                    />
+                    <span className="text-gray-700">{goal.label}</span>
                   </label>
                 ))}
               </div>

@@ -3,18 +3,22 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getImprovementSuggestions } from '@/lib/improvementSuggestions'
+import { getMarketingSuggestions } from '@/lib/marketingSuggestions'
 
 type ImprovementData = {
   siteUrl: string
   issues: string[]
   competitorUrl: string
   additionalInfo: string
+  currentTrafficSources: string[]
+  marketingGoals: string[]
 }
 
 export default function KaizenShindanResult() {
   const router = useRouter()
   const [formData, setFormData] = useState<ImprovementData | null>(null)
   const [suggestions, setSuggestions] = useState<ReturnType<typeof getImprovementSuggestions>>([])
+  const [marketingSuggestions, setMarketingSuggestions] = useState<ReturnType<typeof getMarketingSuggestions>>([])
 
   useEffect(() => {
     const savedData = localStorage.getItem('kaizenShindanData')
@@ -22,6 +26,11 @@ export default function KaizenShindanResult() {
       const data = JSON.parse(savedData) as ImprovementData
       setFormData(data)
       setSuggestions(getImprovementSuggestions(data.issues))
+      setMarketingSuggestions(getMarketingSuggestions(
+        data.currentTrafficSources || [],
+        data.marketingGoals || [],
+        data.issues
+      ))
     } else {
       router.push('/kaizen-shindan')
     }
@@ -111,6 +120,50 @@ export default function KaizenShindanResult() {
             <p className="text-sm text-gray-500 mt-2">
               競合サイトの良い点を参考にしながら、独自性のあるサイトを構築することが重要です。
             </p>
+          </div>
+        )}
+
+        {/* Webマーケティング施策提案 */}
+        {marketingSuggestions.length > 0 && (
+          <div className="space-y-6 mb-8">
+            <h2 className="text-2xl font-bold text-center">Webマーケティング施策提案</h2>
+            {marketingSuggestions.map((suggestion, index) => (
+              <div key={suggestion.strategy} className="card">
+                <div className="flex items-start justify-between mb-4">
+                  <h3 className="text-xl font-bold">{suggestion.title}</h3>
+                  <div className="flex gap-2">
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium border ${getPriorityColor(suggestion.priority)}`}>
+                      {getPriorityLabel(suggestion.priority)}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-sm font-medium border ${
+                      suggestion.difficulty === 'easy' ? 'text-green-600 bg-green-50 border-green-200' :
+                      suggestion.difficulty === 'medium' ? 'text-yellow-600 bg-yellow-50 border-yellow-200' :
+                      'text-red-600 bg-red-50 border-red-200'
+                    }`}>
+                      難易度: {suggestion.difficulty === 'easy' ? '低' : suggestion.difficulty === 'medium' ? '中' : '高'}
+                    </span>
+                  </div>
+                </div>
+                <p className="text-gray-700 mb-4">{suggestion.description}</p>
+                <div className="mb-4">
+                  <h4 className="font-bold mb-2">期待できる効果</h4>
+                  <ul className="space-y-2">
+                    {suggestion.benefits.map((benefit, bIndex) => (
+                      <li key={bIndex} className="flex items-start">
+                        <svg className="w-5 h-5 text-accent mt-0.5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className="text-gray-700">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-gray-50 p-3 rounded-lg">
+                  <span className="font-medium">概算費用: </span>
+                  <span className="text-primary font-bold">{suggestion.estimatedCost}</span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
